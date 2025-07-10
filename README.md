@@ -2,8 +2,6 @@
 
 ### 🔦 1. LED7SEG (Common Cathode)
 
-**LED7SEG** là loại LED hiển thị gồm 7 thanh (a–g) và 1 dấu chấm thập phân (dp) để hiển thị số từ 0–9.
-
 - **Forward voltage per segment**: ~2V
 - **Max forward current**: ~20mA/segment
 - **Segment ON logic**: HIGH (LED turns ON), LOW (OFF)
