@@ -146,3 +146,92 @@ Use **Q7'** (also called **Q7s** or serial out) from the first 74HC595 to **casc
 > - The next 8 bits go into **IC1 (Segment Control)**
 
 ---
+## 📚 myLED Library (Custom Driver for 7-Segment with 74HC595)
+
+This library provides functions to control a 7-segment display using one or two 74HC595 shift registers. It supports displaying single digits, multiple digits (via LED scanning), and full strings up to 5 characters.
+
+---
+
+### 📁 Files
+
+- `myLED.h` – Header file containing function prototypes and macros.
+- `myLED.c` – Source file implementing the functions.
+
+---
+
+### 🧰 Available Functions
+
+#### 🔹 `void Data8_put(uint8_t d8)`
+Sends a single byte (8 bits) to one 74HC595 shift register.
+
+- **d8**: The data byte.
+- **Bit Mapping**:
+  - `QH` (bit 7) = MSB
+  - `QA` (bit 0) = LSB
+
+> Useful when controlling a single digit or segment pattern.
+
+---
+
+#### 🔹 `void Data16_put(uint16_t d16)`
+Sends a 16-bit value across **two daisy-chained 74HC595 chips**.
+
+- The first 8 bits are shifted into the second register (e.g., digit select),
+- The remaining 8 bits go into the first register (e.g., segment control).
+
+- **Bit Mapping**:
+  - `QH` of second 595 = MSB of `d16` (bit 15)
+  - `QA` of first 595 = LSB of `d16` (bit 0)
+
+> Used for scanning LED displays with multiplexing (LED scanning method).
+
+---
+
+#### 🔹 `void LED_data(uint8_t n)`
+Displays a digit `n` (0–9, or valid letters) by shifting the corresponding segment code to the LED.
+
+> Internally uses a lookup table to map `n` to segment patterns.
+
+Example:
+```c
+LED_data(3); // Displays digit 3
+```
+---
+
+### 🔹 `void LED_put(uint8_t n, uint8_t p)`
+Displays digit or character `n` on the selected LED position `p`.
+
+- `n`: The digit (0–9) or supported character (e.g., A–F, H, L, etc.)
+- `p`: A bitmask that selects which LED positions to activate (see below)
+
+#### 🧭 LED Position Mapping (`p` values):
+
+| p Value | Active LED Position(s) | Binary     |
+|---------|-------------------------|------------|
+| 0       | **All LEDs OFF**        | `00000000` |
+| 1       | k1                      | `00000001` |
+| 2       | k2                      | `00000010` |
+| 4       | k3                      | `00000100` |
+| 8       | k4                      | `00001000` |
+| 16      | k5                      | `00010000` |
+| 3       | k1 + k2                 | `00000011` |
+| 7       | k1 + k2 + k3            | `00000111` |
+> Setting `p = 0` disables all digits. This is useful for clearing the display or as part of a scanning routine where each digit is refreshed one at a time.
+
+---
+
+### 🔹 `void LED_putstring(uint8_t *s)`
+Displays a character string on the 7-segment display (up to 5 characters).
+
+#### ⚙️ Behavior:
+
+- Only the **first 5 characters** of the input string `s` will be displayed (k1 → k5).
+- For each character:
+  - If it's **supported** (e.g., `0–9`, `A–F`, `H`, `L`, `P`, etc.), the corresponding segment pattern is displayed.
+  - If it's **not found** in the character lookup table, that position will be **blank (OFF)**.
+
+#### Example:
+```c
+LED_putstring("123Ab"); // Shows 1 2 3 A b (if all are in encoding table)
+LED_putstring("7$9X!"); // Shows 7 (blank) 9 X (blank)
+
