@@ -363,10 +363,26 @@ Four **active-low push buttons** (normally open) are used for user interaction. 
 | `P4`   | Confirm / Value ++    | e.g., `PB9`             | Pull-up resistor required  |
 ---
 
-## 📂 How to Setting `GPIO` in STM32CubeMX Project
+## 📂 How to `Create Project` in STM32CubeMX.
 
-1. Open **STM32CubeMx** project.
+1. Create a project using **STM32F103RCT**.
 2. Follow the steps in the picture.
+
+<img width="324" height="370" alt="Image" src="https://github.com/user-attachments/assets/76bd85b9-2821-4eb9-b4e0-5cb0401417e0" />
+
+<img width="869" height="335" alt="Image" src="https://github.com/user-attachments/assets/26d74456-a805-4144-bfbc-11c77b1c77ba" />
+
+### 🧩 Step 1: Setup GPIO
+
+<img width="1327" height="547" alt="Image" src="https://github.com/user-attachments/assets/561263d6-38e4-497b-9b9e-24f392084240" />
+
+### 🧩 Step 2: Enable Serial Wire Debug (SWD)
+
+<img width="1114" height="492" alt="Image" src="https://github.com/user-attachments/assets/0bdff256-ecb8-44e6-bc37-f0f51115f2a5" />
+
+### 🧩 Step 3: Generate Code in **Keil uVision**
+
+<img width="1333" height="446" alt="Image" src="https://github.com/user-attachments/assets/2b0bda3c-dbff-41e2-86db-6e9893051405" />
 
 ---
 ## 🧪 Application Examples
