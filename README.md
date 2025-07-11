@@ -234,4 +234,220 @@ Displays a character string on the 7-segment display (up to 5 characters).
 ```c
 LED_putstring("123Ab"); // Shows 1 2 3 A b (if all are in encoding table)
 LED_putstring("7$9X!"); // Shows 7 (blank) 9 X (blank)
+```
+---
+
+### 🔹 `void display_LED(int num, uint8_t start, uint8_t stop)`
+Displays a multi-digit integer (`num`) on the 7-segment display, within digit range from `start` to `stop`.
+
+- `num`: Integer number to be displayed (positive only)
+- `start`: Start position (e.g., 1 = leftmost digit)
+- `stop`: End position (e.g., 5 = rightmost digit)
+
+#### Example:
+```c
+display_LED(123, 1, 3); // Displays digits '1', '2', '3' from positions 1 to 3
+```
+---
+
+### 🔹 `void blink_LED(int num, long long *last_blink, uint8_t start, uint8_t stop)`
+Displays a multi-digit number `num` on the 7-segment display, with a **blinking effect** applied to digits in the range `[start, stop]`.
+
+#### 🧩 Parameters:
+- `num`: The integer number to be displayed (e.g., 0–99999)
+- `last_blink`: Pointer to a timestamp (e.g., using `HAL_GetTick()`) to keep track of blinking state
+- `start`: Index of the first digit to blink (1 = leftmost digit)
+- `stop`: Index of the last digit to blink (5 = rightmost digit)
+
+#### 🔁 Behavior:
+- The digits in the range `[start, stop]` will toggle between **visible** and **blank** every ~500 milliseconds.
+- Digits **outside the range** are always shown.
+
+#### 🧠 How it works:
+Internally uses a software timer (based on `HAL_GetTick()`) to toggle a visibility flag. Only the digits within the blinking range are hidden/shown periodically.
+
+#### 📘 Example:
+```c
+long long last_blink_time = 0;
+
+blink_LED(345, &last_blink_time, 2, 4); 
+// → Digits 3, 4, 5 will blink (positions 2, 3, 4)
+```
+---
+
+### 🔹 `void display_mm_ss(int mm, int ss, long long *last_blink, int mode_blink)`
+Displays the time in `MM–SS` (minutes–seconds) format using **five 7-segment LEDs**. Supports blinking modes for user time-setting interaction.
+
+---
+
+#### 🧩 Parameters:
+
+- `mm`: Minutes value (0–99)
+- `ss`: Seconds value (0–59)
+- `last_blink`: Pointer to a timer variable (e.g., from `HAL_GetTick()`) used to track blinking state
+- `mode_blink`: Blink mode for indicating current adjustment state
+
+---
+
+### 🧭 Supported Blink Modes
+
+| Mode Constant | Description                     | Blinking Behavior                        |
+|---------------|----------------------------------|-------------------------------------------|
+| `MODE_SS`     | **Second-setting mode**          | The **seconds digits** (LED 4 and 5) blink every 0.5s |
+| `MODE_MM`     | **Minute-setting mode**          | The **minutes digits** (LED 1 and 2) blink every 0.5s |
+| `NO_MODE`     | **Normal display mode**          | All LEDs are constantly shown (no blinking) |
+
+---
+
+### 🖥️ LED Layout: `MM–SS` on 5 Digits
+
+The time is displayed on **5 separate 7-segment LEDs** as follows:
+
+| LED Position | Content         | Description              |
+|--------------|------------------|--------------------------|
+| k1 (LED 1)   | `M₁`             | Tens of minutes          |
+| k2 (LED 2)   | `M₂`             | Units of minutes         |
+| k3 (LED 3)   | `-`              | Dash or blank separator  |
+| k4 (LED 4)   | `S₁`             | Tens of seconds          |
+| k5 (LED 5)   | `S₂`             | Units of seconds         |
+
+> The center LED (`k3`) shows a dash `–` as a **visual separator** between minutes and seconds.
+
+---
+
+### 🧠 Blinking Behavior
+
+- Blinking is handled via non-blocking timing using `HAL_GetTick()` or an equivalent.
+- The specified digit range will **toggle visibility ON/OFF every ~500 ms** depending on `mode_blink`.
+
+---
+
+### 📘 Examples
+
+```c
+long long last_blink_time = 0;
+
+display_mm_ss(12, 45, &last_blink_time, MODE_SS);  // Show "12-45", blink 4th and 5th LEDs (seconds)
+display_mm_ss(08, 30, &last_blink_time, MODE_MM);  // Show "08-30", blink 1st and 2nd LEDs (minutes)
+display_mm_ss(23, 59, &last_blink_time, NO_MODE);  // Show "23-59", no blinking
+```
+---
+
+## 🔌 Wiring Overview
+
+### 📟 7-Segment LED Display via 74HC595 Shift Register
+
+To control the 7-segment LEDs, we use **one or two 74HC595 shift registers**, connected to STM32 as follows:
+
+| STM32 Pin | 74HC595 Pin | Description                   |
+|-----------|-------------|-------------------------------|
+| `PA4`      | DS     | Serial Data Input             |
+| `PA3`      | SHCP   | Shift Register Clock Input    |
+| `PA6`      | STCP   | Storage Register Clock (Latch)|
+| `PA5`      | GND    | Output Enable (Active LOW)    |
+| 5V         | Vcc    | Master Reset (Active LOW)     |
+
+> 🧠 For dual shift registers: Connect **Q7S** of the first 74HC595 to **DS** of the second. This allows you to shift 16 bits (2 bytes) for **5-digit multiplexing control + segment data**.
+
+---
+
+### 🔘 Button Interface (P1–P4)
+
+Four **active-low push buttons** (normally open) are used for user interaction. Each button should be connected with a **pull-up resistor** or internal pull-up via STM32.
+
+| Button | Functionality         | Connected To STM32 Pin | Circuit Note              |
+|--------|-----------------------|-------------------------|----------------------------|
+| `P1`   | Count-up / Increment  | e.g., `PB4`             | Pull-up resistor required  |
+| `P2`   | Count-down / Decrement| e.g., `PB5`             | Pull-up resistor required  |
+| `P3`   | Mode switch           | e.g., `PB8`             | Pull-up resistor required  |
+| `P4`   | Confirm / Value ++    | e.g., `PB9`             | Pull-up resistor required  |
+---
+
+## 🧪 Application Examples
+
+---
+
+### 🟢 3.4. Application 2: Manual Number Control with Buttons
+
+This program uses the 7-segment display and `74HC595` shift register to display and control a 5-digit number. The system responds to 4 push buttons (`P1` → `P4`) with the following behavior:
+
+#### 🔧 Behavior:
+
+- **At startup**: The display shows the default number `12345`.
+- **P1 pressed**: The number increases by 1  
+  → e.g. `12345` → `12346`
+- **P2 pressed**: The number decreases by 1  
+  → e.g. `12345` → `12344`
+- **P3 pressed**: The number resets to the default `12345`
+- **P4 pressed**: The number begins **auto-incrementing** by 1 every second  
+  → Counting continues until `99999`, then stops automatically.
+
+#### 🔁 Notes:
+- Each button press should be **debounced** to avoid repeated triggers.
+- Use `HAL_GetTick()` or a hardware timer to implement the 1-second interval for P4.
+
+---
+
+### 🟢 3.5. Application 3: Digital Clock MM–SS Mode with Adjustment
+
+This application implements a **digital clock (minute-second)** using a **5-digit 7-segment display**, with full support for **count-up, count-down, and manual adjustment** using 4 buttons.
+
+#### 🔧 Initial Display:
+
+- At startup, the display shows `12–00` → 12 minutes, 00 seconds
+
+---
+
+### 🔘 Button Functions:
+
+| Button | Functionality                                                                 |
+|--------|--------------------------------------------------------------------------------|
+| **P1** | Toggle **count-up mode** (increases seconds by 1 every second)                |
+| **P2** | Toggle **count-down mode** (decreases seconds by 1 every second)              |
+| **P3** | Cycle through **adjustment modes**:<br>1. Adjust Seconds (2 right LEDs blink)<br>2. Adjust Minutes (2 left LEDs blink)<br>3. Exit Adjustment (no blinking) |
+| **P4** | Increment the current value depending on mode:<br>- In **second adjust mode**: +1 second<br>- In **minute adjust mode**: +1 minute<br>- In **no mode**: No effect |
+
+---
+
+### 🧭 Adjustment Modes (cycled by P3):
+
+| Mode Name   | LED Behavior             | Affected by P4 |
+|-------------|--------------------------|----------------|
+| `MODE_SS`   | Seconds digits blink     | Add 1 second   |
+| `MODE_MM`   | Minutes digits blink     | Add 1 minute   |
+| `NO_MODE`   | No blinking (normal)     | P4 has no effect |
+
+---
+
+### 🔁 Time Behavior:
+
+- **Counting Up**:
+  - `MM–SS` increases every second.
+  - When seconds reach `59`, reset to `00` and minutes increase by 1.
+- **Counting Down**:
+  - `MM–SS` decreases every second.
+  - When seconds reach `00`, reset to `59` and minutes decrease by 1.
+  - Stops when both minutes and seconds are `00`.
+
+---
+
+### 💡 Adjustment Notes:
+
+- When adjusting minutes or seconds:
+  - Values wrap around after 59 → 00.
+  - Increasing seconds from `59` → `00` **does NOT affect minutes**.
+- Ensure only one mode (count-up or count-down) is active at a time to avoid conflicts.
+
+---
+
+### 📘 Example Usage:
+
+```c
+// Initial display
+display_mm_ss(12, 0, &last_blink_time, NO_MODE);
+
+// User presses P1: Start auto count-up
+// User presses P3 twice: Enter minute adjustment mode
+// User presses P4 repeatedly: Increase minutes
+// User presses P2: Start count-down
 
