@@ -373,28 +373,6 @@ Four **active-low push buttons** (normally open) are used for user interaction. 
 | `P2`   | Count-down / Decrement| e.g., `PB5`             | Pull-up resistor required  |
 | `P3`   | Mode switch           | e.g., `PB8`             | Pull-up resistor required  |
 | `P4`   | Confirm / Value ++    | e.g., `PB9`             | Pull-up resistor required  |
----
-
-## 📂 How to `Create Project` in STM32CubeMX.
-
-1. Create a project using **STM32F103RCT**.
-2. Follow the steps in the picture.
-
-<img width="324" height="370" alt="Image" src="https://github.com/user-attachments/assets/76bd85b9-2821-4eb9-b4e0-5cb0401417e0" />
-
-<img width="869" height="335" alt="Image" src="https://github.com/user-attachments/assets/26d74456-a805-4144-bfbc-11c77b1c77ba" />
-
-### 🧩 Step 1: Setup GPIO
-
-<img width="1327" height="547" alt="Image" src="https://github.com/user-attachments/assets/561263d6-38e4-497b-9b9e-24f392084240" />
-
-### 🧩 Step 2: Enable Serial Wire Debug (SWD)
-
-<img width="1114" height="492" alt="Image" src="https://github.com/user-attachments/assets/0bdff256-ecb8-44e6-bc37-f0f51115f2a5" />
-
-### 🧩 Step 3: Generate Code in **Keil uVision**
-
-<img width="1333" height="446" alt="Image" src="https://github.com/user-attachments/assets/2b0bda3c-dbff-41e2-86db-6e9893051405" />
 
 ---
 ## 🧪 Application Examples in file `demo_led7seg_594.cpp`
@@ -491,6 +469,30 @@ display_mm_ss(12, 0, &last_blink_time, NO_MODE);
 // User presses P4 repeatedly: Increase minutes
 // User presses P2: Start count-down
 ```
+
+---
+
+## 📂 How to `Create Project` in STM32CubeMX.
+
+1. Create a project using **STM32F103RCT**.
+2. Follow the steps in the picture.
+
+<img width="324" height="370" alt="Image" src="https://github.com/user-attachments/assets/76bd85b9-2821-4eb9-b4e0-5cb0401417e0" />
+
+<img width="869" height="335" alt="Image" src="https://github.com/user-attachments/assets/26d74456-a805-4144-bfbc-11c77b1c77ba" />
+
+### 🧩 Step 1: Setup GPIO
+
+<img width="1327" height="547" alt="Image" src="https://github.com/user-attachments/assets/561263d6-38e4-497b-9b9e-24f392084240" />
+
+### 🧩 Step 2: Enable Serial Wire Debug (SWD)
+
+<img width="1114" height="492" alt="Image" src="https://github.com/user-attachments/assets/0bdff256-ecb8-44e6-bc37-f0f51115f2a5" />
+
+### 🧩 Step 3: Generate Code in **Keil uVision**
+
+<img width="1333" height="446" alt="Image" src="https://github.com/user-attachments/assets/2b0bda3c-dbff-41e2-86db-6e9893051405" />
+
 ---
 
 ## 📂 How to Add `myLED` Library in Keil C Project
