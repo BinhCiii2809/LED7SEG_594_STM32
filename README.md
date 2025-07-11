@@ -385,8 +385,14 @@ Four **active-low push buttons** (normally open) are used for user interaction. 
 <img width="1333" height="446" alt="Image" src="https://github.com/user-attachments/assets/2b0bda3c-dbff-41e2-86db-6e9893051405" />
 
 ---
-## 🧪 Application Examples
+## 🧪 Application Examples in file `demo_led7seg_594.cpp`
 
+#### 📌 To run the demo:
+
+- Add the file `demo_led7seg_594.cpp` to your **Keil µVision project**.
+- Make sure you’ve already added:
+  - `myLED.c` and `myLED.h` to your project
+  - Required GPIO configurations via STM32CubeMX
 ---
 
 ### 🟢 3.4. Application 2: Manual Number Control with Buttons
