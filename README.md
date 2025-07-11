@@ -114,3 +114,35 @@ You can visualize the timing as follows:
 | 3    | 1   | ↑      |        | 00000011                   | —              |
 | ...  | ... | ...    | ...    | ...                        | —              |
 | 8    | 1   | ↑      | ↑      | 01110110 (0x76)            | 01110110       |
+
+## 🔁 Expanding with 2x 74HC595 Using LED Scanning Method
+
+When using multiple 7-segment displays (e.g., 2 digits or more), it's inefficient to assign a separate 74HC595 for each one. Instead, we can **use two 74HC595 chips** together with the **LED scanning method**.
+
+---
+
+### 🧱 Hardware Architecture
+
+- **IC1 (Segment Register)**: Drives segment lines `A–G` (shared across all displays)
+- **IC2 (Digit Selector)**: Controls common cathodes (or anodes) of each digit
+- Only **one digit is active at a time**, but switching rapidly (100–500Hz) creates the illusion that all digits are lit simultaneously.
+
+---
+### ⚡ Wiring Overview
+
+| Component        | Connection                                       |
+|------------------|--------------------------------------------------|
+| **74HC595 #1**   | Q0–Q7 → Segments a–g (shared across all digits) |
+| **74HC595 #2**   | Q0–Qn → Common cathode/anode of each digit      |
+| SHCP & STCP      | Shared between both ICs                         |
+| DS               | Daisy-chained: IC2 → IC1 (for 16-bit shift)     |
+| **Q7' (Serial Out) of IC1** | Connected to **DS of IC2 (Digit Selector)** |
+
+Use **Q7'** (also called **Q7s** or serial out) from the first 74HC595 to **cascade** to the second 595.
+> This allows shifting **16 bits** (8 bits per chip) using only one data line (DS), one clock (SHCP), and one latch (STCP).
+> 
+> In this configuration:
+> - The first 8 bits go into **IC2 (Digit Selector)**
+> - The next 8 bits go into **IC1 (Segment Control)**
+
+---
