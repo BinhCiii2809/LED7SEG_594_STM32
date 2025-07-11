@@ -12,6 +12,8 @@
 
 - Creating STM32CubeMX projects with GPIO and SWD configuration
 
+- How to connect the 74HC594 to STM32
+
 - Adding custom source (.c) and header (.h) files to Keil uVision
 
 ## 📚 Reference Documentation
@@ -86,14 +88,14 @@ This datasheet includes:
 
 ### ⚙️ Working Principle of 74HC595
 
-| Pin | Name    | Describe |
-|------|--------|------|
-| DS   | Data   | Data input |
-| SHCP | Shift  | Shifts data on rising edge |
-| STCP | Latch  | Transfers data to outputs on rising edge |
-| Q0–Q7| Output | Connected to display segments |
-| OE   | Output Enable | Active LOW  |
-| MR   | Master Reset  | Active LOW  |
+| Pin | Name    | Describe                                 | GPIOs STM32 |
+|------|--------|------------------------------------------|-------------|
+| DS   | Data   | Data input                               | `OUTPUT`    |
+| SHCP | Shift  | Shifts data on rising edge               | `OUTPUT`    |
+| STCP | Latch  | Transfers data to outputs on rising edge | `OUTPUT`    |
+| Q0–Q7| Output | Connected to display segments            |             |
+| OE   | Output Enable | Active LOW                        | `OUTPUT`    |
+| MR   | Master Reset  | Active LOW                        | `GND`       |
 
 ---
 
@@ -485,6 +487,8 @@ display_mm_ss(12, 0, &last_blink_time, NO_MODE);
 <img width="1327" height="547" alt="Image" src="https://github.com/user-attachments/assets/561263d6-38e4-497b-9b9e-24f392084240" />
 
 ### 🧩 Step 3: Set up OUTPUT
+
+<img width="976" height="517" alt="Image" src="https://github.com/user-attachments/assets/3d90112c-6d8e-4f33-b283-f501dfd4c124" />
 
 ### 🧩 Step 4: Enable Serial Wire Debug (SWD)
 
