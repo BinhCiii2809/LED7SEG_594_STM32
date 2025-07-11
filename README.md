@@ -158,6 +158,35 @@ Use **Q7'** (also called **Q7s** or serial out) from the first 74HC595 to **casc
 > - The next 8 bits go into **IC1 (Segment Control)**
 
 ---
+
+### 📟 7-Segment LED Display via 74HC595 Shift Register
+
+To control the 7-segment LEDs, we use **one or two 74HC595 shift registers**, connected to STM32 as follows:
+
+| STM32 Pin  | 74HC595 Pin   | Description                   |
+|------------|---------------|-------------------------------|
+| `PA4`      | DS,`MOSI`     | Serial Data Input             |
+| `PA3`      | SHCP,`SCK`    | Shift Register Clock Input    |
+| `PA6`      | STCP,`RCK`    | Storage Register Clock (Latch)|
+| `PA5`      | GND,`RCL`     | Output Enable (Active LOW)    |
+| 5V         | Vcc           | Master Reset (Active LOW)     |
+
+> 🧠 For dual shift registers: Connect **Q7S** of the first 74HC595 to **DS** of the second. This allows you to shift 16 bits (2 bytes) for **5-digit multiplexing control + segment data**.
+
+---
+
+### 🔘 Button Interface (P1–P4)
+
+Four **active-low push buttons** (normally open) are used for user interaction. Each button should be connected with a **pull-up resistor** or internal pull-up via STM32.
+
+| Button | Functionality         | Connected To STM32 Pin | Circuit Note              |
+|--------|-----------------------|-------------------------|----------------------------|
+| `P1`   | Count-up / Increment  | e.g., `PB4`             | Pull-up resistor required  |
+| `P2`   | Count-down / Decrement| e.g., `PB5`             | Pull-up resistor required  |
+| `P3`   | Mode switch           | e.g., `PB8`             | Pull-up resistor required  |
+| `P4`   | Confirm / Value ++    | e.g., `PB9`             | Pull-up resistor required  |
+
+---
 ## 📚 myLED Library 
 
 This library provides functions to control a 7-segment display using one or two 74HC595 shift registers. It supports displaying single digits, multiple digits (via LED scanning), and full strings up to 5 characters.
@@ -343,36 +372,6 @@ display_mm_ss(12, 45, &last_blink_time, MODE_SS);  // Show "12-45", blink 4th an
 display_mm_ss(08, 30, &last_blink_time, MODE_MM);  // Show "08-30", blink 1st and 2nd LEDs (minutes)
 display_mm_ss(23, 59, &last_blink_time, NO_MODE);  // Show "23-59", no blinking
 ```
----
-
-## 🔌 Wiring Overview
-
-### 📟 7-Segment LED Display via 74HC595 Shift Register
-
-To control the 7-segment LEDs, we use **one or two 74HC595 shift registers**, connected to STM32 as follows:
-
-| STM32 Pin  | 74HC595 Pin   | Description                   |
-|------------|---------------|-------------------------------|
-| `PA4`      | DS,`MOSI`     | Serial Data Input             |
-| `PA3`      | SHCP,`SCK`    | Shift Register Clock Input    |
-| `PA6`      | STCP,`RCK`    | Storage Register Clock (Latch)|
-| `PA5`      | GND,`RCL`     | Output Enable (Active LOW)    |
-| 5V         | Vcc           | Master Reset (Active LOW)     |
-
-> 🧠 For dual shift registers: Connect **Q7S** of the first 74HC595 to **DS** of the second. This allows you to shift 16 bits (2 bytes) for **5-digit multiplexing control + segment data**.
-
----
-
-### 🔘 Button Interface (P1–P4)
-
-Four **active-low push buttons** (normally open) are used for user interaction. Each button should be connected with a **pull-up resistor** or internal pull-up via STM32.
-
-| Button | Functionality         | Connected To STM32 Pin | Circuit Note              |
-|--------|-----------------------|-------------------------|----------------------------|
-| `P1`   | Count-up / Increment  | e.g., `PB4`             | Pull-up resistor required  |
-| `P2`   | Count-down / Decrement| e.g., `PB5`             | Pull-up resistor required  |
-| `P3`   | Mode switch           | e.g., `PB8`             | Pull-up resistor required  |
-| `P4`   | Confirm / Value ++    | e.g., `PB9`             | Pull-up resistor required  |
 
 ---
 ## 🧪 Application Examples in file `demo_led7seg_594.cpp`
