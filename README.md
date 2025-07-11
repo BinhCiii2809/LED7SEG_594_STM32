@@ -391,7 +391,7 @@ Four **active-low push buttons** (normally open) are used for user interaction. 
 
 - Add the file `demo_led7seg_594.cpp` to your **Keil µVision project**.
 - Make sure you’ve already added:
-  - `myLED.c` and `myLED.h` to your project
+  - `myLED.c` and `myLED.h`, `myGPIO.c` and `myGPIO.h` to your project
   - Required GPIO configurations via STM32CubeMX
 ---
 
