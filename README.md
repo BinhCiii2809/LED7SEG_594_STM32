@@ -1,20 +1,41 @@
-## 📘 LED7SEG & 74HC595 Shift Register
+## 📘 Overview
 
-### 🔦 1. LED7SEG (Common Cathode)
+### 🔍 Review
 
-- **Forward voltage per segment**: ~2V
-- **Max forward current**: ~20mA/segment
+- Building a 7-segment binary encoding table
+
+- Driving one or multiple digits using the daisy-chain LED scanning method
+
+- Implementing a reusable driver library myLED.c/.h
+
+- Sample applications using buttons for manual input, auto increment, and digital time display
+
+- Creating STM32CubeMX projects with GPIO and SWD configuration
+
+- Adding custom source (.c) and header (.h) files to Keil uVision
+
+## 📚 Reference Documentation
+
+For more detailed technical specifications and operational guidance, refer to the official datasheet:
+
+**74HC595** is an 8-bit serial-in, parallel-out shift register with a storage register and tri-state outputs. It allows expanding output pins using only **3 GPIOs**.
+
+🔗 **74HC595 Timing Diagram – Nexperia**  
+[View Datasheet (PDF)](https://assets.nexperia.com/documents/data-sheet/74HC_HCT595.pdf)
+
+This datasheet includes:
+
+- 8-bit Serial-In, Parallel-Out
+
+- Storage register with tri-state outputs
+
+- Operated by 3 control lines (Data, Shift Clock, Latch Clock)
+
+- Daisy-chain capability for multiple registers
+
+### 🔢 7-Segment Encoding Table(Cathode)
+
 - **Segment ON logic**: HIGH (LED turns ON), LOW (OFF)
-
-| Segment | Description  |
-|---------|-------|
-| A–G     | Display segments |
-| DP      | Decimal point |
-| COM     | GND pin |
-
----
-
-### 🔢 7-Segment Encoding Table
 
 | Character | F | A | E | D | DP | B | G | C | HEX Code |
 |-----------|---|---|---|---|----|---|---|---|-------------|
@@ -48,21 +69,6 @@
 
 ---
 
-### 🧠 2. 74HC595 - 8 bit Shift Register
-- [74HC595 Timing Diagram – Nexperia](https://assets.nexperia.com/documents/data-sheet/74HC_HCT595.pdf)
-**74HC595** is an 8-bit serial-in, parallel-out shift register with a storage register and tri-state outputs. It allows expanding output pins using only **3 GPIOs**.
-
-| Pin | Name    | Mô tả |
-|------|--------|------|
-| DS   | Data   | Data input |
-| SHCP | Shift  | Shifts data on rising edge |
-| STCP | Latch  | Transfers data to outputs on rising edge |
-| Q0–Q7| Output | Connected to display segments |
-| OE   | Output Enable | Active LOW  |
-| MR   | Master Reset  | Active LOW  |
-
----
-
 ### ⚙️ 3. Wiring: 74HC595 to 7-Segment Display
 
 | 74HC595 Pin | 7-Segment Segment |
@@ -76,14 +82,20 @@
 | Q6          | G                 |
 | Q7          | C                 |
 
-## 🧭 Timing Diagram & Working Principle of 74HC595
+---
 
-The **74HC595** shift register receives data serially and outputs it in parallel. It uses three main control signals:
+### ⚙️ Working Principle of 74HC595
 
-- `DS` (Serial Data Input)
-- `SHCP` (Shift Clock): triggers a shift on rising edge
-- `STCP` (Latch Clock): updates output on rising edge
-### ⚙️ Working Steps
+| Pin | Name    | Describe |
+|------|--------|------|
+| DS   | Data   | Data input |
+| SHCP | Shift  | Shifts data on rising edge |
+| STCP | Latch  | Transfers data to outputs on rising edge |
+| Q0–Q7| Output | Connected to display segments |
+| OE   | Output Enable | Active LOW  |
+| MR   | Master Reset  | Active LOW  |
+
+---
 
 1. **Shift Phase** (SHCP ↑)
    - On every rising edge of `SHCP`, the bit on `DS` is shifted into the register.
