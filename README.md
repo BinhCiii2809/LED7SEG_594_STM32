@@ -107,7 +107,7 @@ The **74HC595** shift register receives data serially and outputs it in parallel
 
 You can visualize the timing as follows:
 
-| Step | DS  | SHCP ↑ | STCP ↑ | Internal Register         | Output (Q0–Q7) |
+| Step | DS  | SHCP ↑ | STCP ↑ | Internal Register          | Output (Q0–Q7)  |
 |------|-----|--------|--------|----------------------------|----------------|
 | 1    | 0   | ↑      |        | 00000000                   | —              |
 | 2    | 1   | ↑      |        | 00000001                   | —              |
@@ -132,10 +132,10 @@ When using multiple 7-segment displays (e.g., 2 digits or more), it's inefficien
 
 | Component        | Connection                                       |
 |------------------|--------------------------------------------------|
-| **74HC595 #1**   | Q0–Q7 → Segments a–g (shared across all digits) |
-| **74HC595 #2**   | Q0–Qn → Common cathode/anode of each digit      |
-| SHCP & STCP      | Shared between both ICs                         |
-| DS               | Daisy-chained: IC2 → IC1 (for 16-bit shift)     |
+| **74HC595 #1**   | Q0–Q7 → Segments a–g (shared across all digits)  |
+| **74HC595 #2**   | Q0–Qn → Common cathode/anode of each digit       |
+| SHCP & STCP      | Shared between both ICs                          |
+| DS               | Daisy-chained: IC2 → IC1 (for 16-bit shift)      |
 | **Q7' (Serial Out) of IC1** | Connected to **DS of IC2 (Digit Selector)** |
 
 Use **Q7'** (also called **Q7s** or serial out) from the first 74HC595 to **cascade** to the second 595.
@@ -198,7 +198,7 @@ LED_data(3); // Displays digit 3
 ```
 ---
 
-### 🔹 `void LED_put(uint8_t n, uint8_t p)`
+#### 🔹 `void LED_put(uint8_t n, uint8_t p)`
 Displays digit or character `n` on the selected LED position `p`.
 
 - `n`: The digit (0–9) or supported character (e.g., A–F, H, L, etc.)
@@ -206,7 +206,7 @@ Displays digit or character `n` on the selected LED position `p`.
 
 #### 🧭 LED Position Mapping (`p` values):
 
-| p Value | Active LED Position(s) | Binary     |
+| p Value | Active LED Position(s)  | Binary     |
 |---------|-------------------------|------------|
 | 0       | **All LEDs OFF**        | `00000000` |
 | 1       | k1                      | `00000001` |
@@ -220,7 +220,7 @@ Displays digit or character `n` on the selected LED position `p`.
 
 ---
 
-### 🔹 `void LED_putstring(uint8_t *s)`
+#### 🔹 `void LED_putstring(uint8_t *s)`
 Displays a character string on the 7-segment display (up to 5 characters).
 
 #### ⚙️ Behavior:
@@ -237,7 +237,7 @@ LED_putstring("7$9X!"); // Shows 7 (blank) 9 X (blank)
 ```
 ---
 
-### 🔹 `void display_LED(int num, uint8_t start, uint8_t stop)`
+#### 🔹 `void display_LED(int num, uint8_t start, uint8_t stop)`
 Displays a multi-digit integer (`num`) on the 7-segment display, within digit range from `start` to `stop`.
 
 - `num`: Integer number to be displayed (positive only)
@@ -250,7 +250,7 @@ display_LED(123, 1, 3); // Displays digits '1', '2', '3' from positions 1 to 3
 ```
 ---
 
-### 🔹 `void blink_LED(int num, long long *last_blink, uint8_t start, uint8_t stop)`
+#### 🔹 `void blink_LED(int num, long long *last_blink, uint8_t start, uint8_t stop)`
 Displays a multi-digit number `num` on the 7-segment display, with a **blinking effect** applied to digits in the range `[start, stop]`.
 
 #### 🧩 Parameters:
@@ -275,7 +275,7 @@ blink_LED(345, &last_blink_time, 2, 4);
 ```
 ---
 
-### 🔹 `void display_mm_ss(int mm, int ss, long long *last_blink, int mode_blink)`
+#### 🔹 `void display_mm_ss(int mm, int ss, long long *last_blink, int mode_blink)`
 Displays the time in `MM–SS` (minutes–seconds) format using **five 7-segment LEDs**. Supports blinking modes for user time-setting interaction.
 
 ---
@@ -291,7 +291,7 @@ Displays the time in `MM–SS` (minutes–seconds) format using **five 7-segment
 
 ### 🧭 Supported Blink Modes
 
-| Mode Constant | Description                     | Blinking Behavior                        |
+| Mode Constant | Description                      | Blinking Behavior                         |
 |---------------|----------------------------------|-------------------------------------------|
 | `MODE_SS`     | **Second-setting mode**          | The **seconds digits** (LED 4 and 5) blink every 0.5s |
 | `MODE_MM`     | **Minute-setting mode**          | The **minutes digits** (LED 1 and 2) blink every 0.5s |
@@ -303,7 +303,7 @@ Displays the time in `MM–SS` (minutes–seconds) format using **five 7-segment
 
 The time is displayed on **5 separate 7-segment LEDs** as follows:
 
-| LED Position | Content         | Description              |
+| LED Position | Content          | Description              |
 |--------------|------------------|--------------------------|
 | k1 (LED 1)   | `M₁`             | Tens of minutes          |
 | k2 (LED 2)   | `M₂`             | Units of minutes         |
@@ -339,13 +339,13 @@ display_mm_ss(23, 59, &last_blink_time, NO_MODE);  // Show "23-59", no blinking
 
 To control the 7-segment LEDs, we use **one or two 74HC595 shift registers**, connected to STM32 as follows:
 
-| STM32 Pin | 74HC595 Pin | Description                   |
-|-----------|-------------|-------------------------------|
-| `PA4`      | DS     | Serial Data Input             |
-| `PA3`      | SHCP   | Shift Register Clock Input    |
-| `PA6`      | STCP   | Storage Register Clock (Latch)|
-| `PA5`      | GND    | Output Enable (Active LOW)    |
-| 5V         | Vcc    | Master Reset (Active LOW)     |
+| STM32 Pin  | 74HC595 Pin   | Description                   |
+|------------|---------------|-------------------------------|
+| `PA4`      | DS,`MOSI`     | Serial Data Input             |
+| `PA3`      | SHCP,`SCK`    | Shift Register Clock Input    |
+| `PA6`      | STCP,`RCK`    | Storage Register Clock (Latch)|
+| `PA5`      | GND,`RCL`     | Output Enable (Active LOW)    |
+| 5V         | Vcc           | Master Reset (Active LOW)     |
 
 > 🧠 For dual shift registers: Connect **Q7S** of the first 74HC595 to **DS** of the second. This allows you to shift 16 bits (2 bytes) for **5-digit multiplexing control + segment data**.
 
@@ -363,6 +363,12 @@ Four **active-low push buttons** (normally open) are used for user interaction. 
 | `P4`   | Confirm / Value ++    | e.g., `PB9`             | Pull-up resistor required  |
 ---
 
+## 📂 How to Setting `GPIO` in STM32CubeMX Project
+
+1. Open **STM32CubeMx** project.
+2. Follow the steps in the picture.
+
+---
 ## 🧪 Application Examples
 
 ---
@@ -461,10 +467,28 @@ To use the `myLED.c` and `myLED.h` library in your STM32 project (Keil µVision)
 ### ➕ 2. Add `myLED.c` to Project Source Group
 
 1. Open **Keil µVision** project.
-2. In **Project Explorer**, right-click on **Source Group 1** (or any source group).
+2. In **Project Explorer**, right-click on **Application/User/Core**.
 3. Click **Add Existing Files to Group...**
 4. Navigate to `myLED.c` and select it → Click **Add** → then **Close**
 
 ✅ Now Keil will compile `myLED.c` with your project.
 
+<img width="576" height="424" alt="Image" src="https://github.com/user-attachments/assets/f2182b36-b510-45ad-8682-4c38580aec35" />
 ---
+
+### 📌 How to Add a `.h` Header File to Your Keil Project
+
+Header files (`.h`) contain **function prototypes**, **macros**, and **global variables** used across multiple `.c` files.
+
+To use `myLED.h` or any custom header:
+
+---
+1. Open **Keil µVision** project.
+2. In **Project Explorer**, follow the steps in the picture.
+<img width="1322" height="537" alt="Image" src="https://github.com/user-attachments/assets/e42710b0-e5dc-46b1-be87-b49be8034ed5" />
+
+### 🧩 Step 5: Place the Header File
+
+Make sure `myLED.h` is placed in an accessible folder within your project directory.
+
+<img width="833" height="458" alt="Image" src="https://github.com/user-attachments/assets/2d1718f7-e776-4bdc-8bfa-1345d987d18a" />
