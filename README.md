@@ -450,4 +450,21 @@ display_mm_ss(12, 0, &last_blink_time, NO_MODE);
 // User presses P3 twice: Enter minute adjustment mode
 // User presses P4 repeatedly: Increase minutes
 // User presses P2: Start count-down
+```
+---
 
+## 📂 How to Add `myLED` Library in Keil C Project
+
+To use the `myLED.c` and `myLED.h` library in your STM32 project (Keil µVision), follow these steps:
+
+---
+### ➕ 2. Add `myLED.c` to Project Source Group
+
+1. Open **Keil µVision** project.
+2. In **Project Explorer**, right-click on **Source Group 1** (or any source group).
+3. Click **Add Existing Files to Group...**
+4. Navigate to `myLED.c` and select it → Click **Add** → then **Close**
+
+✅ Now Keil will compile `myLED.c` with your project.
+
+---
