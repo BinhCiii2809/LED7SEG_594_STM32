@@ -374,17 +374,18 @@ display_mm_ss(23, 59, &last_blink_time, NO_MODE);  // Show "23-59", no blinking
 ```
 
 ---
-## 🧪 Application Examples in file `demo_led7seg_594.cpp`
+## 🧪 Application Examples
 
-#### 📌 To run the demo:
+All the following demo applications are implemented in the file:
 
-- Add the file `demo_led7seg_594.cpp` to your **Keil µVision project**.
-- Make sure you’ve already added:
+📁 demo_led7seg_594.cpp
+
+📌 Make sure you’ve already added:
   - `myLED.c` and `myLED.h`, `myGPIO.c` and `myGPIO.h` to your project
   - Required GPIO configurations via STM32CubeMX
 ---
 
-### 🟢 3.4. Application 2: Manual Number Control with Buttons
+### 🟢 Application 2: Manual Number Control with Buttons
 
 This program uses the 7-segment display and `74HC595` shift register to display and control a 5-digit number. The system responds to 4 push buttons (`P1` → `P4`) with the following behavior:
 
@@ -405,7 +406,7 @@ This program uses the 7-segment display and `74HC595` shift register to display 
 
 ---
 
-### 🟢 3.5. Application 3: Digital Clock MM–SS Mode with Adjustment
+### 🟢 Application 3: Digital Clock MM–SS Mode with Adjustment
 
 This application implements a **digital clock (minute-second)** using a **5-digit 7-segment display**, with full support for **count-up, count-down, and manual adjustment** using 4 buttons.
 
@@ -473,22 +474,23 @@ display_mm_ss(12, 0, &last_blink_time, NO_MODE);
 
 ## 📂 How to `Create Project` in STM32CubeMX.
 
-1. Create a project using **STM32F103RCT**.
-2. Follow the steps in the picture.
+### 🧩 Step 1: Create a project using **STM32F103RCT**.
 
 <img width="324" height="370" alt="Image" src="https://github.com/user-attachments/assets/76bd85b9-2821-4eb9-b4e0-5cb0401417e0" />
 
 <img width="869" height="335" alt="Image" src="https://github.com/user-attachments/assets/26d74456-a805-4144-bfbc-11c77b1c77ba" />
 
-### 🧩 Step 1: Setup GPIO
+### 🧩 Step 2: Set up INPUT pull-up
 
 <img width="1327" height="547" alt="Image" src="https://github.com/user-attachments/assets/561263d6-38e4-497b-9b9e-24f392084240" />
 
-### 🧩 Step 2: Enable Serial Wire Debug (SWD)
+### 🧩 Step 3: Set up OUTPUT
+
+### 🧩 Step 4: Enable Serial Wire Debug (SWD)
 
 <img width="1114" height="492" alt="Image" src="https://github.com/user-attachments/assets/0bdff256-ecb8-44e6-bc37-f0f51115f2a5" />
 
-### 🧩 Step 3: Generate Code in **Keil uVision**
+### 🧩 Step 5: Generate Code in **Keil uVision**
 
 <img width="1333" height="446" alt="Image" src="https://github.com/user-attachments/assets/2b0bda3c-dbff-41e2-86db-6e9893051405" />
 
