@@ -498,7 +498,7 @@ To use the `myLED.c` and `myLED.h` library in your STM32 project (Keil µVision)
 <img width="576" height="424" alt="Image" src="https://github.com/user-attachments/assets/f2182b36-b510-45ad-8682-4c38580aec35" />
 ---
 
-### 📌 How to Add a `.h` Header File to Your Keil Project
+### 📌 How to Add a `myLED.h` Header File to Your Keil Project
 
 Header files (`.h`) contain **function prototypes**, **macros**, and **global variables** used across multiple `.c` files.
 
