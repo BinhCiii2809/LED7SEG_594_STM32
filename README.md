@@ -146,7 +146,7 @@ Use **Q7'** (also called **Q7s** or serial out) from the first 74HC595 to **casc
 > - The next 8 bits go into **IC1 (Segment Control)**
 
 ---
-## 📚 myLED Library (Custom Driver for 7-Segment with 74HC595)
+## 📚 myLED Library 
 
 This library provides functions to control a 7-segment display using one or two 74HC595 shift registers. It supports displaying single digits, multiple digits (via LED scanning), and full strings up to 5 characters.
 
